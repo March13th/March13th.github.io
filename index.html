@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>LuLu</title>
+
+  <style>
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:0.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace, monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{-moz-box-sizing:border-box;box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:0.35em 0.625em 0.75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+</style>
+
+    <style>
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.container > header,
+.codrops-top {
+	font-family: 'Lato', Arial, sans-serif;
+}
+
+.container > header {
+	margin: 0 auto;
+	padding: 2em;
+	text-align: center;
+	background: rgba(0,0,0,0.01);
+}
+
+.container > header h1 {
+	font-size: 2.625em;
+	line-height: 1.3;
+	margin: 0;
+	font-weight: 300;
+}
+
+.container > header span {
+	display: block;
+	font-size: 60%;
+	opacity: 0.7;
+	padding: 0 0 0.6em 0.1em;
+}
+
+/* To Navigation Style */
+.codrops-top {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.6);
+	text-transform: uppercase;
+	width: 100%;
+	font-size: 0.69em;
+	line-height: 2.2;
+}
+
+.codrops-top a {
+	text-decoration: none;
+	padding: 0 1em;
+	letter-spacing: 0.1em;
+	color: #888;
+	display: inline-block;
+}
+
+.codrops-top a:hover {
+	background: rgba(255,255,255,0.95);
+	color: #333;
+}
+
+.codrops-top span.right {
+	float: right;
+}
+
+.codrops-top span.right a {
+	float: left;
+	display: block;
+}
+
+.codrops-icon:before {
+	font-family: 'codropsicons';
+	margin: 0 4px;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.codrops-icon-drop:before {
+	content: "\e001";
+}
+
+.codrops-icon-prev:before {
+	content: "\e004";
+}
+
+/* Demo Buttons Style */
+.codrops-demos {
+	padding-top: 1em;
+	font-size: 0.9em;
+}
+
+.codrops-demos a {
+	text-decoration: none;
+	outline: none;
+	display: inline-block;
+	margin: 0.5em;
+	padding: 0.7em 1.1em;
+	border: 3px solid #b1aea6;
+	color: #b1aea6;
+	font-weight: 700;
+}
+
+.codrops-demos a:hover,
+.codrops-demos a.current-demo,
+.codrops-demos a.current-demo:hover {
+	border-color: #89867e;
+	color: #89867e;
+}
+
+@media screen and (max-width: 25em) {
+
+	.codrops-icon span {
+		display: none;
+	}
+
+}
+
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+body {
+	background: #111111;
+	font-family: 'Lato', Arial, sans-serif;
+	color: #fff;
+}
+
+.wrapper {
+	margin: 0 auto 100px auto;
+	max-width: 960px;
+}
+
+.stage {
+	list-style: none;
+	padding: 0;
+}
+
+/*************************************
+Build the scene and rotate on hover
+**************************************/
+
+.scene {
+	width: 260px;
+	height: 400px;
+	margin: 30px;
+	float: left;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	perspective: 1000px;
+}
+
+.movie {
+	width: 260px;
+	height: 400px;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	-webkit-transform: translateZ(-130px);
+	-moz-transform: translateZ(-130px);
+	transform: translateZ(-130px);
+	-webkit-transition: -webkit-transform 350ms;
+	-moz-transition: -moz-transform 350ms;
+	transition: transform 350ms;
+}
+
+.movie:hover {
+	-webkit-transform: rotateY(-78deg) translateZ(20px);
+	-moz-transform: rotateY(-78deg) translateZ(20px);
+	transform: rotateY(-78deg) translateZ(20px);
+}
+
+/*************************************
+Transform and style the two planes
+**************************************/
+
+.movie .poster, 
+.movie .info {
+	position: absolute;
+	width: 260px;
+	height: 400px;
+	background-color: #fff;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.movie .poster  {
+	-webkit-transform: translateZ(130px);
+	-moz-transform: translateZ(130px);
+	transform: translateZ(130px);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.movie .info {
+	-webkit-transform: rotateY(90deg) translateZ(130px);
+	-moz-transform: rotateY(90deg) translateZ(130px);
+	transform: rotateY(90deg) translateZ(130px);
+	border: 1px solid #B8B5B5;
+	font-size: 0.75em;
+}
+
+/*************************************
+Shadow beneath the 3D object
+**************************************/
+
+.csstransforms3d .movie::after {
+	content: '';
+	width: 260px;
+	height: 260px;
+	position: absolute;
+	bottom: 0;
+	box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+	-webkit-transform-origin: 100% 100%;
+	-moz-transform-origin: 100% 100%;
+	transform-origin: 100% 100%;
+	-webkit-transform: rotateX(90deg) translateY(130px);
+	-moz-transform: rotateX(90deg) translateY(130px);
+	transform: rotateX(90deg) translateY(130px);
+	-webkit-transition: box-shadow 350ms;
+	-moz-transition: box-shadow 350ms;
+	transition: box-shadow 350ms;
+}
+
+.csstransforms3d .movie:hover::after {
+	box-shadow: 20px -5px 50px rgba(0,0,0,0.3);
+}
+
+/*************************************
+Movie information
+**************************************/
+
+.info header {
+	color: #FFF;
+	padding: 7px 10px;
+	font-weight: bold;
+	height: 195px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	text-shadow: 0px 1px 1px rgba(0,0,0,1);
+}
+
+.info header h1 {
+	margin: 0 0 2px;
+	font-size: 1.4em;
+}
+
+.info header .rating {
+	border: 1px solid #FFF;
+	padding: 0px 3px;
+}
+
+.info p {
+	padding: 1.2em 1.4em;
+	margin-top: 50%;
+	font-weight: 700;
+	color: #666;
+	line-height: 1.4em;
+	border: 10px solid #555;
+	font-size: 2em;
+    color: black;
+}
+
+/*************************************
+Generate "lighting" using box shadows
+**************************************/
+
+.movie .poster,
+.movie .info,
+.movie .info header {
+	-webkit-transition: box-shadow 350ms;
+	-moz-transition: box-shadow 350ms;
+	transition: box-shadow 350ms;
+}
+
+.csstransforms3d .movie .poster {
+	box-shadow: inset 0px 0px 40px rgba(255,255,255,0);
+}
+
+.csstransforms3d .movie:hover .poster {
+	box-shadow: inset 300px 0px 40px rgba(255,255,255,0.8);
+}
+
+.csstransforms3d .movie .info, 
+.csstransforms3d .movie .info header {
+	box-shadow: inset -300px 0px 40px rgba(0,0,0,0.5);
+}
+
+.csstransforms3d .movie:hover .info, 
+.csstransforms3d .movie:hover .info header {
+	box-shadow: inset 0px 0px 40px rgba(0,0,0,0);
+}
+
+/*************************************
+Posters and still images
+**************************************/
+
+.scene:nth-child(1) .movie .poster {
+  background-image: url(Y.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(2) .poster {
+  background-image: url(B.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(3) .poster {
+  background-image: url(C.jpg);
+}
+
+
+.scene:nth-child(4) .movie .poster {
+  background-image: url(D.jpg);
+}
+
+.scene:nth-child(5) .movie .poster {
+  background-image: url(E.jpg);
+}
+
+.scene:nth-child(6) .movie .poster {
+  background-image: url(F.jpg);
+}
+
+.scene:nth-child(7) .movie .poster {
+  background-image: url(G.jpg);
+}
+
+.scene:nth-child(8) .movie .poster {
+  background-image: url(H.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(9) .movie .poster {
+  background-image: url(I.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(10) .movie .poster {
+  background-image: url(J.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(11) .movie .poster {
+  background-image: url(K.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(12) .movie .poster {
+  background-image: url(L.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(13) .movie .poster {
+  background-image: url(M.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(14) .movie .poster {
+  background-image: url(N.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(15) .movie .poster {
+  background-image: url(O.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(16) .movie .poster {
+  background-image: url(Q.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(17) .movie .poster {
+  background-image: url(P.jpg);
+  
+}
+
+.scene:nth-child(18) .movie .poster {
+  background-image: url(R.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(19) .movie .poster {
+  background-image: url(S.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(20) .movie .poster {
+  background-image: url(T.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(21) .movie .poster {
+  background-image: url(U.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(22) .movie .poster {
+  background-image: url(V.jpg);
+}
+
+.scene:nth-child(23) .movie .poster {
+  background-image: url(W.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(24) .movie .poster {
+  background-image: url(X.jpg);
+  background-position:center;
+}
+
+.scene:nth-child(25) .movie .poster {
+  background-image: url(A.jpg);
+  background-position:center;
+  
+}
+.poster-end {
+  margin:0 36.5%;
+}
+
+
+
+
+.scene .info header {
+	background-color:white;
+}
+
+
+
+/*************************************
+Fallback
+**************************************/
+.no-csstransforms3d .movie .poster, 
+.no-csstransforms3d .movie .info {
+	position: relative;
+}
+
+/*************************************
+Media Queries
+**************************************/
+@media screen and (max-width: 60.75em){
+	.scene {
+		float: none;
+		margin: 30px auto 60px;
+	}
+}
+
+</style>
+
+    <script src="js/prefixfree.min.js"></script>
+
+    <script src="js/modernizr.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+			<div style="text-align:center;clear:both">
+<script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
+<script src="/follow.js" type="text/javascript"></script>
+</div>
+			<div class="wrapper">
+				<ul class="stage clearfix">
+
+					<li class="scene">
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									从前到如今，你都一如既往的天真烂漫。
+								</p>
+							</div>
+						</div>
+					</li>
+
+					<li class="scene">
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									我想陪你走很多很多路，给你照很多很多照片。
+								</p>
+							</div>
+						</div>
+					</li>
+
+					<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									爱情中的一项，是不是也包括一起吃很多很多顿饭。
+								</p>
+							</div>
+						</div>
+					</li>
+									<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									你总是搞怪，我们也总因此笑的前仰后合，疯疯癫癫。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+					<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									把头发剪短，你还是一样好看。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+					<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									我还会陪你走过很多很多年。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									陪你喝没喝过的饮料，走在你的身边。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									陪你一起幸福的吃各种好吃的饭。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									即使争吵，我先认错的规则也永远不会变。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									今天是在一起的937天。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									希望你一直带着可爱的笑容，即使偶尔阴天。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									希望我们慢慢把想去的地方都去一遍。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									每天都充满仪式感。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									比如一起看遗迹中的樱花。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									比如一起看海豚表演。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									比如一起漫步清澈的海边。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									太多一起经历的事物和景色，没法一一数完。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+					<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									只希望后面的日子，还能和你一起乘风破浪。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									一起把疲惫生活的英雄梦想实现。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									也顺便带着这只古灵精怪的傻狗。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									一起在旅途中走走停停，笑容满面。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									露宝儿^ ^
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									我愿意陪你出走一生。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									我愿意陪你归来仍是少年。
+								</p>
+							</div>
+						</div>
+					</li>
+					
+														<li class="scene poster-end">
+					
+						<div class="movie" onclick="return true">
+							<div class="poster"></div>
+							<div class="info">
+								<p>
+									25张照片，25岁生日快乐。
+								</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div><!-- /wrapper -->
+		</div><!-- /container -->
+</body>
+
+</html>
